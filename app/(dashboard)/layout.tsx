@@ -24,7 +24,7 @@ import { NavItem } from "@/components/shared/nav-item";
 import Providers from "@/components/shared/providers";
 import RequireAuth from "@/hooks/RequireAuth";
 import { observer } from "mobx-react-lite";
-import { usePathname } from "next/navigation";
+import { usePathname, useRouter } from "next/navigation";
 import { AuthContext } from "@/lib/context/AuthContext";
 import { useContext } from "react";
 import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
@@ -141,3 +141,16 @@ const DashboardLayout = ({ children }: { children: React.ReactNode }) => {
 };
 
 export default observer(DashboardLayout);
+function useEffect(
+  arg0: () => void,
+  arg1: ({
+    userIdentity: import("../../lib/types/common").UserIdentity | null;
+    userRole: import("../../lib/types/common").UserRole;
+    login: (
+      loginInfo: import("../../lib/types/common").LoginPayload
+    ) => Promise<void>;
+    logout: () => Promise<void>;
+  } | null)[]
+) {
+  throw new Error("Function not implemented.");
+}

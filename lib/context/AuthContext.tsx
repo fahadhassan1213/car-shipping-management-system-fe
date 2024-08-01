@@ -3,6 +3,7 @@
 import React, { createContext, useState, useEffect, useMemo } from "react";
 import { LoginPayload, UserIdentity, UserRole } from "../types/common";
 import gatewayService from "../services/GatewayService";
+import { useRouter } from "next/navigation";
 
 type AuthContextType = {
   userIdentity: UserIdentity | null;
@@ -14,10 +15,11 @@ type AuthContextType = {
 export const AuthContext = createContext<AuthContextType | null>(null);
 
 export const AuthProvider = ({ children }: { children: React.ReactNode }) => {
+  const router = useRouter();
   const [userIdentity, setUserIdentity] = useState<UserIdentity | null>(null);
 
   const userRole = useMemo(() => {
-    return userIdentity?.user.roles[0].role.name as UserRole;
+    return userIdentity?.user?.roles[0].role.name as UserRole;
   }, [userIdentity]);
 
   useEffect(() => {
@@ -26,6 +28,12 @@ export const AuthProvider = ({ children }: { children: React.ReactNode }) => {
       setUserIdentity(JSON.parse(storedUserIdentity));
     }
   }, []);
+
+  useEffect(() => {
+    if (!userIdentity?.access_token) {
+      router.push("/auth/user/login");
+    }
+  }, [userIdentity]);
 
   const login = async (loginInfo: LoginPayload) => {
     const identity = await gatewayService.login(loginInfo);
